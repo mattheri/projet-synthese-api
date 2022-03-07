@@ -1,36 +1,25 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const axios = require('axios').default;
 const students = require('./students');
 const string = require('./string');
 
-// get all the mock files
-fs.readdirSync('./mock').map(file => {
-	students.map(student => {
-		let timeoutThreshold = 0;
-		const filePath = `${__dirname}/mock/${file}`;
-		const fileExists = fs.existsSync(filePath);
+(async function () {
+	const files = await fs.readdir(`./mock`);
+	files.map(file => console.log(file));
+	const urls = students.flatMap((student) => {
+		return files.map(file => process.env.API_URL ? `${process.env.API_URL}/api/${student}/${file.replace('.mock.js', '')}/many` : `http://localhost:3000/api/${student}/${file.replace('.mock.js', '')}/many`);
+	});
 
-		if (!fileExists) {
-			throw new Error(`File ${filePath} does not exist.`);
-		}
+	const mocks = await Promise.all(files.map(async (file) => ({ path: file.replace('.mock.js', ''), mock: await require(`./mock/${file}`)() })));
 
-		require(filePath)().then(mocks => {
-			const path = file.replace('.mock.js', '');
-			const url = process.env.API_URL ? `${process.env.API_URL}/api/${student}/${path}` : `http://localhost:3000/api/${student}/${path}`;
+	const mocksWithUrl = urls.map(url => ({ url, mocks: mocks.find(mock => url.includes(mock.path)) }));
 
-			for (let i = 0; i < mocks.length; i++) {
-				const mock = mocks[i];
+	mocksWithUrl.map(async ({ url, mocks }, index) => {
+		setTimeout(async () => {
+			console.log('url', url);
 
-				setTimeout(() => {
-					axios.post(url, { [string.camelCase(path)]: mock })
-						.catch(err => {
-							console.log(err);
-						}).then(() => {
-							timeoutThreshold = 1000 * i;
-						});
-				}, timeoutThreshold);
-			}
-		});
-	})
-});
+			await axios.post(url, { [string.camelCase(mocks.path)]: mocks.mock })
+		}, index * 100);
+	});
+})();
 

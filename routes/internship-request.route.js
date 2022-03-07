@@ -27,7 +27,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-	getModel(req).create(req.body[modelName])
+	getModel(req).create({ ...req.body[modelName], user: req.student })
 		.then(results => {
 			res.json(results);
 		})
@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	getModel(req).update(req.params.id, req.body[modelName])
+	getModel(req).update(req.params.id, { ...req.body[modelName], user: req.student })
 		.then(results => {
 			res.json(results);
 		})
@@ -58,6 +58,16 @@ router.delete('/:id', (req, res) => {
 
 router.delete('/wipe', (req, res) => {
 	getModel(req).wipe()
+		.then(results => {
+			res.json(results);
+		})
+		.catch(err => {
+			res.status(500).json(err);
+		});
+})
+
+router.post('/many', (req, res) => {
+	getModel(req).createMany([...req.body[modelName].map(data => ({ ...data, user: req.student }))])
 		.then(results => {
 			res.json(results);
 		})

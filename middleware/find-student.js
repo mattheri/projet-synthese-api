@@ -5,6 +5,8 @@ const findStudent = (req, res, next) => {
 		return res.status(500).json(JSON.stringify({ error: `student: ${req.params.student} not found` }));
 	}
 
+	if (req.student) delete req.student;
+
 	req.student = req.params.student;
 	next();
 }

@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const findStudent = require('./middleware/find-student');
-
-router.use(`/api/:student`, findStudent);
+router.use(`/api/:student`, require('./middleware/find-student'));
 router.use('/api/:student/enterprise', require('./routes/enterprise.route'));
 router.use('/api/:student/activity-sector', require('./routes/activity-sector.route'));
 router.use('/api/:student/candidate', require('./routes/candidate.route'));

@@ -3,12 +3,6 @@ const string = require('./string');
 
 function createModel(student) {
 	return ({ name, schema }) => {
-		schema.pre('save', function (next) {
-			this.updatedAt = new Date();
-			this.user = student;
-			next();
-		});
-
 		if (!schema.options.toObject) schema.options.toObject = {};
 
 		schema.options.toObject.transform = function (_, ret) {
@@ -22,7 +16,6 @@ function createModel(student) {
 					if (err) {
 						reject(err);
 					} else {
-						console.log(result);
 						resolve(result?.toObject() || {});
 					}
 				});
@@ -93,12 +86,17 @@ function createModel(student) {
 
 		schema.statics[string.methodize(name, 'deleteAll')] = function () {
 			return new Promise((resolve, reject) => {
-				console.log('deleting all');
-				this.remove({}).exec((err, result) => {
+				this.deleteMany({}).then((res) => resolve('success', res));
+			});
+		}
+
+		schema.statics[string.methodize(name, 'createMany')] = function (data) {
+			return new Promise((resolve, reject) => {
+				this.insertMany(data, (err, result) => {
 					if (err) {
 						reject(err);
 					} else {
-						resolve('wiping all ' + name + 's');
+						resolve(result);
 					}
 				})
 			});
