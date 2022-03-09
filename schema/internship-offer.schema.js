@@ -16,4 +16,5 @@ module.exports = new mongoose.Schema({
 	published: Boolean,
 	user: String,
 	updatedAt: Date,
+	active: Boolean,
 });

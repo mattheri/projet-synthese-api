@@ -16,4 +16,5 @@ module.exports = new mongoose.Schema({
 	paid: [String],
 	user: String,
 	updatedAt: Date,
+	active: Boolean,
 });

@@ -21,9 +21,17 @@ const getPayType = () => {
 	return faker.random.arrayElements(["paid", "unpaid", "not-specified"], (Math.random() + 1) * 3);
 }
 
+const determinePublishedState = (percent = 30) => {
+	const convertedPercent = percent / 100;
+
+	return Math.random() > convertedPercent;
+}
+
 const generateMock = (times = 10) => {
 	return new Promise((resolve) => {
 		const mock = [];
+
+		const isPublished = determinePublishedState();
 
 		for (let i = 0; i < times; i++) {
 			mock.push({
@@ -38,7 +46,8 @@ const generateMock = (times = 10) => {
 				additionalInfo: faker.lorem.paragraphs(),
 				paid: getPayType(),
 				skills: getSkills(),
-				published: Math.random() > 0.3,
+				published: isPublished,
+				active: isPublished,
 			});
 		}
 
