@@ -16,9 +16,14 @@ function camelCase(string) {
 	return string.replace(/[-_](\w)/g, (match, letter) => letter.toUpperCase());
 }
 
+function normalize(string) {
+	return pluralize(string.toLowerCase().replace(/[-_]/g, ''));
+}
+
 module.exports = {
 	pluralize,
 	capitalize,
 	methodize,
-	camelCase
+	camelCase,
+	normalize
 }
