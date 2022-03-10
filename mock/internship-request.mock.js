@@ -21,6 +21,8 @@ const getPayType = () => {
 	return faker.random.arrayElements(["paid", "unpaid", "not-specified"], (Math.random() + 1) * 3);
 }
 
+const a = () => { }
+
 // Will determine if the internship offer is published or not
 const determinePublishedState = (percent = 30) => {
 	const convertedPercent = percent / 100;
