@@ -1,7 +1,8 @@
+const { DB_NAME } = require("./params");
 const mongoose = require('mongoose');
 
 function connect({ username, password }) {
-	const connectionUrl = "mongodb+srv://username:password@projet-synthese.cy5wt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority".replace('username', username).replace('password', password);
+	const connectionUrl = `mongodb+srv://${username}:${password}@projet-synthese.cy5wt.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
 	return new Promise((resolve, reject) => {
 		if (mongoose.connection.readyState === 0) {

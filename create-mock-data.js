@@ -1,3 +1,4 @@
+const { API_URL } = require("./params");
 const fs = require('fs/promises');
 const axios = require('axios').default;
 const students = require('./students');
@@ -5,9 +6,8 @@ const string = require('./string');
 
 (async function () {
 	const files = await fs.readdir(`./mock`);
-	files.map(file => console.log(file));
 	const urls = students.flatMap((student) => {
-		return files.map(file => process.env.API_URL ? `${process.env.API_URL}/api/${student}/${file.replace('.mock.js', '')}/many` : `http://localhost:3000/api/${student}/${file.replace('.mock.js', '')}/many`);
+		return files.map(file => `${API_URL}/${student}/${file.replace('.mock.js', '')}/many`);
 	});
 
 	const mocks = await Promise.all(files.map(async (file) => ({ path: file.replace('.mock.js', ''), mock: await require(`./mock/${file}`)() })));

@@ -1,12 +1,10 @@
+const { ADMIN_PASSWORD, ADMIN_USER, DB_NAME } = require("./params");
 const fs = require('fs/promises');
 const string = require('./string');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-
-dotenv.config();
 
 (async function () {
-	const URI = `mongodb+srv://${process.env.DB_ADMIN_USER}:${process.env.DB_ADMIN_PASSWORD}@projet-synthese.cy5wt.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+	const URI = `mongodb+srv://${ADMIN_USER}:${ADMIN_PASSWORD}@projet-synthese.cy5wt.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 	const connection = mongoose.createConnection(URI);
 	const files = await fs.readdir(`./mock`);
 
