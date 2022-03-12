@@ -1,12 +1,9 @@
-const express = require('express');
-const app = express();
+const { PORT } = require("./params");
+const app = require('./app');
 
 app.use(require('cors')());
 app.use(require("helmet")());
 app.use(require('body-parser').json());
-
-const PORT = process.env.PORT || 3000;
-
 app.use(require('./api-router'));
 
 app.listen(PORT, () => {
