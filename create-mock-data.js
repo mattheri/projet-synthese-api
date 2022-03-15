@@ -18,7 +18,7 @@ const string = require('./string');
 		setTimeout(async () => {
 			console.log('url', url);
 
-			await axios.post(url, { [string.camelCase(mocks.path)]: mocks.mock })
+			await axios.post(url, { ...mocks.mock })
 		}, index * 100);
 	});
 })();

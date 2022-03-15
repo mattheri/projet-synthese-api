@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-	getModel(req).create({ ...req.body[modelName], user: req.student })
+	getModel(req).create({ ...req.body, user: req.student })
 		.then(results => {
 			res.json(results);
 		})

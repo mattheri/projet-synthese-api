@@ -27,7 +27,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-	getModel(req).create({ ...req.body[modelName], user: req.student })
+	getModel(req).create({ ...req.body, user: req.student })
 		.then(results => {
 			res.json(results);
 		})
@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	getModel(req).update(req.params.id, { ...req.body[modelName], user: req.student })
+	getModel(req).update(req.params.id, { ...req.body, user: req.student })
 		.then(results => {
 			res.json(results);
 		})

@@ -50,18 +50,29 @@ function createModel(student) {
 
 		schema.statics[string.methodize(name, 'update')] = function (id, data) {
 			return new Promise((resolve, reject) => {
-				this.findOneAndUpdate({ id: id, user: student }, data).exec((err, result) => {
-					if (err) {
-						reject(err);
-					} else {
-						this.find().where('user').equals(student).exec((err, result) => {
-							if (err) {
-								reject(err);
-							} else {
-								resolve(result.map(r => r.toObject()));
-							}
-						})
-					}
+				new Promise((resolve, reject) => {
+					this.findOneAndUpdate({ _id: id, user: student }, data, { new: true, lean: true }).exec((err, result) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve(result);
+						}
+					})
+				}).then((result) => {
+					const updateResult = result;
+					this.find({}).where('user').equals(student).exec((err, result) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve(result.map(r => {
+								if (r._id.toString() === updateResult._id.toString()) {
+									return updateResult;
+								} else {
+									return r.toObject();
+								}
+							}));
+						}
+					})
 				})
 			});
 		}
