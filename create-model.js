@@ -79,7 +79,7 @@ function createModel(student) {
 
 		schema.statics[string.methodize(name, 'delete')] = function (id) {
 			return new Promise((resolve, reject) => {
-				this.findOneAndDelete({ id: id, user: student }).exec((err, result) => {
+				this.findOneAndDelete({ _id: id, user: student }).exec((err, result) => {
 					if (err) {
 						reject(err);
 					} else {

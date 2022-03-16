@@ -4,9 +4,13 @@ const axios = require('axios').default;
 const students = require('./students');
 const string = require('./string');
 
-(async function () {
+(async function createMockData() {
+	const FLAG = "--s";
+	const flagIndex = process.argv.indexOf(FLAG);
+	const studentId = flagIndex >= 0 && process.argv[flagIndex + 1];
+
 	const files = await fs.readdir(`./mock`);
-	const urls = students.flatMap((student) => {
+	const urls = flagIndex >= 0 && studentId ? files.map(file => `${API_URL}/${studentId}/${file.replace('.mock.js', '')}/many`) : students.flatMap((student) => {
 		return files.map(file => `${API_URL}/${student}/${file.replace('.mock.js', '')}/many`);
 	});
 
@@ -18,8 +22,7 @@ const string = require('./string');
 		setTimeout(async () => {
 			console.log('url', url);
 
-			await axios.post(url, { ...mocks.mock })
+			await axios.post(url, { [string.camelCase(mocks.path)]: mocks.mock })
 		}, index * 100);
 	});
 })();
-
