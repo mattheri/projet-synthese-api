@@ -12,5 +12,4 @@ module.exports = new mongoose.Schema({
 	postalCode: String,
 	published: Boolean,
 	user: String,
-	updatedAt: Date,
 });

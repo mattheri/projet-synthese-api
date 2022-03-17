@@ -15,6 +15,5 @@ module.exports = new mongoose.Schema({
 	skills: [String],
 	published: Boolean,
 	user: String,
-	updatedAt: Date,
 	active: Boolean,
 });

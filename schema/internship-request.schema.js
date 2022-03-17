@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 module.exports = new mongoose.Schema({
 	title: String,
-	description: String,
-	enterprise: String,
+	studentName: String,
+	studentPresentation: String,
+	school: String,
 	startDate: Date,
 	endDate: Date,
 	program: String,
-	requirements: String,
 	stageType: String,
 	hoursPerWeek: Number,
 	additionalInfo: String,
@@ -15,6 +15,9 @@ module.exports = new mongoose.Schema({
 	published: Boolean,
 	paid: [String],
 	user: String,
-	updatedAt: Date,
 	active: Boolean,
+	region: String,
+	activitySector: String,
+	city: String,
+	linkToResume: String,
 });

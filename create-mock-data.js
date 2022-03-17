@@ -18,11 +18,38 @@ const string = require('./string');
 
 	const mocksWithUrl = urls.map(url => ({ url, mocks: mocks.find(mock => url.includes(mock.path)) }));
 
-	mocksWithUrl.map(async ({ url, mocks }, index) => {
+	await Promise.all(mocksWithUrl.map(async ({ url, mocks }, index) => {
 		setTimeout(async () => {
 			console.log('url', url);
 
 			await axios.post(url, { [string.camelCase(mocks.path)]: mocks.mock })
 		}, index * 100);
-	});
+	}));
+
+	// const schemaLinkedToOtherDocuments = [
+	// 	{ schema: `${API_URL}/:studentId/internship-offer/:id`, linkedTo: `${API_URL}/:studentId/enterprise`, key: "enterprise" },
+	// 	{ schema: `${API_URL}/:studentId/internship-request/:id`, linkedTo: `${API_URL}/:studentId/candidate`, key: "student" }
+	// ];
+
+	// const requestToLinkToOtherDocuments = flagIndex >= 0 && studentId ? schemaLinkedToOtherDocuments.map(({ schema, linkedTo, key }) => {
+	// 	return { url: schema.replace(':studentId', studentId), linkDocumentUrl: linkedTo.replace(':studentId', studentId), key };
+	// }) : students.flatMap(student => schemaLinkedToOtherDocuments.map(({ schema, linkedTo, key }) => {
+	// 	return { url: schema.replace(':studentId', student), linkDocumentUrl: linkedTo.replace(':studentId', student), key };
+	// }));
+
+	// requestToLinkToOtherDocuments.map(({ url, linkDocumentUrl, key }, index) => {
+	// 	setTimeout(async () => {
+	// 		const { data } = await axios.get(url.replace('/:id', ''));
+	// 		const { data: linkedDocuments } = await axios.get(linkDocumentUrl);
+
+	// 		const documents = data.map(async (document) => {
+	// 			const index = Math.random() * (linkedDocuments.length - 1);
+	// 			const linkedDocument = linkedDocuments[Math.floor(index)];
+	// 			const { data } = await axios.put(url.replace(':id', document._id), { [key]: linkedDocument._id });
+	// 			return data;
+	// 		})
+
+	// 		await Promise.all(documents);
+	// 	}, index * 1000);
+	// });
 })();

@@ -37,18 +37,21 @@ const generateMock = (times = 10) => {
 		for (let i = 0; i < times; i++) {
 			mock.push({
 				title: faker.name.jobTitle(),
-				description: faker.lorem.paragraphs(),
-				enterprise: faker.company.companyName(),
+				studentName: `${faker.name.firstName()} ${faker.name.lastName()}`,
+				studentPresentation: faker.lorem.paragraphs(),
+				school: faker.company.companyName(),
 				startDate: faker.date.soon(20),
 				endDate: faker.date.soon(60),
 				program: faker.name.jobDescriptor(),
-				requirements: faker.lorem.paragraphs(),
 				...stageType(Math.random() > 0.7),
 				additionalInfo: faker.lorem.paragraphs(),
 				paid: getPayType(),
 				skills: getSkills(),
 				published: isPublished,
 				active: isPublished,
+				region: faker.address.state(),
+				activitySector: faker.name.jobTitle(),
+				city: faker.address.city(),
 			});
 		}
 
