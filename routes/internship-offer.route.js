@@ -1,79 +1,103 @@
-const router = require('express').Router();
-const initRoute = require('../middleware/init-route');
-const modelName = 'internshipOffer';
-const schema = require('../schema/internship-offer.schema');
-const getModel = require('../get-model')(modelName);
+const router = require("express").Router();
+const initRoute = require("../middleware/init-route");
+const modelName = "internshipOffer";
+const schema = require("../schema/internship-offer.schema");
+const getModel = require("../get-model")(modelName);
 
-router.use('*', initRoute(schema, modelName));
+router.use("*", initRoute(schema, modelName));
 
-router.get('/', (req, res) => {
-	getModel(req).findAll()
-		.then(results => {
-			res.json(results);
-		})
-		.catch(err => {
-			res.status(500).json(err);
-		});
+router.get("/", (req, res) => {
+  getModel(req)
+    .findAll()
+    .then((results) => {
+      res.json(results);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
-router.get('/:id', (req, res) => {
-	getModel(req).find(req.params.id)
-		.then(result => {
-			res.json(result);
-		})
-		.catch(err => {
-			res.status(500).json(err);
-		});
+router.get("/:id", (req, res) => {
+  if (req.params.id.length < 5) {
+    return res.status(400).json({
+      error: "Bad request",
+    });
+  }
+  getModel(req)
+    .find(req.params.id)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
-router.post('/', (req, res) => {
-	getModel(req).create({ ...req.body, user: req.student })
-		.then(results => {
-			res.json(results);
-		})
-		.catch(err => {
-			res.status(500).json(err);
-		});
+router.post("/", (req, res) => {
+  if (!req.body || req.body._id) {
+    return res.status(400).json({
+      error: "Bad request",
+    });
+  }
+  getModel(req)
+    .create({ ...req.body, user: req.student })
+    .then((results) => {
+      res.json(results);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
-router.put('/:id', (req, res) => {
-	getModel(req).update(req.params.id, { ...req.body, user: req.student })
-		.then(results => {
-			res.json(results);
-		})
-		.catch(err => {
-			res.status(500).json(err);
-		});
+router.put("/:id", (req, res) => {
+  if (!req.body || req.body._id || req.params.id.length < 5) {
+    return res.status(400).json({
+      error: "Bad request",
+    });
+  }
+  getModel(req)
+    .update(req.params.id, { ...req.body, user: req.student })
+    .then((results) => {
+      res.json(results);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
-router.delete('/:id', (req, res) => {
-	getModel(req).delete(req.params.id)
-		.then(results => {
-			res.json(results);
-		})
-		.catch(err => {
-			res.status(500).json(err);
-		});
+router.delete("/:id", (req, res) => {
+  getModel(req)
+    .delete(req.params.id)
+    .then((results) => {
+      res.json(results);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
-router.delete('/wipe', (req, res) => {
-	getModel(req).wipe()
-		.then(results => {
-			res.json(results);
-		})
-		.catch(err => {
-			res.status(500).json(err);
-		});
-})
+router.delete("/wipe", (req, res) => {
+  getModel(req)
+    .wipe()
+    .then((results) => {
+      res.json(results);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 
-router.post('/many', (req, res) => {
-	getModel(req).createMany([...req.body[modelName].map(data => ({ ...data, user: req.student }))])
-		.then(results => {
-			res.json(results);
-		})
-		.catch(err => {
-			res.status(500).json(err);
-		});
-})
+router.post("/many", (req, res) => {
+  getModel(req)
+    .createMany([
+      ...req.body[modelName].map((data) => ({ ...data, user: req.student })),
+    ])
+    .then((results) => {
+      res.json(results);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 
 module.exports = router;
