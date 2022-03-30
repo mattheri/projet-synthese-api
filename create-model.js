@@ -49,10 +49,6 @@ function createModel(student) {
               } else {
                 resolve(result.map((r) => r.toObject()));
               }
-            })
-            .catch((err) => {
-              console.log(err);
-              reject(err);
             });
         });
       }).catch((err) => {
