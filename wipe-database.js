@@ -17,6 +17,8 @@ const mongoose = require('mongoose');
 
 		if (dropStatus) console.log(`Collection ${file} dropped`);
 		else console.log(`Collection ${file} not dropped`);
+
+		return dropStatus;
 	}));
 
 	connection.close();
