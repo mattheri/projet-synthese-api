@@ -40,6 +40,7 @@ function createModel(student) {
     schema.statics[string.methodize(name, "create")] = function (data) {
       return new Promise((resolve, reject) => {
         if (data.__v) delete data.__v;
+        if (data._id) delete data._id;
         this.create(data).then(() => {
           this.find({})
             .where("user")
@@ -61,6 +62,7 @@ function createModel(student) {
     schema.statics[string.methodize(name, "update")] = function (id, data) {
       return new Promise((resolve, reject) => {
         if (data.__v) delete data.__v;
+        if (data._id) delete data._id;
         new Promise((resolve, reject) => {
           this.findOneAndUpdate({ _id: id, user: student }, data, {
             new: true,
